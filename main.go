@@ -6,18 +6,57 @@ import (
 	"log"
 
 	"github.com/TuxedoFish/golang-learning/src/simple"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
 func main() {
-
 	// Create a pointer to a sample message
 	sm := doSimple()
 
 	// Read and write demo
 	readAndWriteDemo(sm)
+
+	// Read and write JSON demo
+	JSONDemo(sm)
 }
 
+func JSONDemo(sm proto.Message) {
+	// Convert to JSON
+	smAsString := toJSON(sm)
+	fmt.Println(protojson.Format(sm))
+
+	// Convert from JSON
+	sm2 := &simple.SimpleMessage{}
+	fromJSON(smAsString, sm2)
+	fmt.Println(sm2)
+}
+
+// Marshals from JSON using protojson
+func toJSON(pb proto.Message) []byte {
+	out, err := protojson.Marshal(pb)
+
+	if err != nil {
+		log.Fatalln("Can't write JSON to bytes")
+		return make([]byte, 0)
+	}
+
+	fmt.Println("Converted to json bytes!")
+	return out
+}
+
+// Converts from json using protojson
+func fromJSON(in []byte, pb proto.Message) {
+	err := protojson.Unmarshal(in, pb)
+
+	if err != nil {
+		log.Fatalln("Can't write JSON to bytes")
+	}
+
+	fmt.Println("Read from json bytes!")
+}
+
+// Writes a protobuffer to file and reads it
 func readAndWriteDemo(sm proto.Message) {
 	// Write to a binary file
 	writeToFile("simple.bin", sm)
