@@ -10,10 +10,22 @@ import (
 )
 
 func main() {
+
+	// Create a pointer to a sample message
 	sm := doSimple()
 
+	// Read and write demo
+	readAndWriteDemo(sm)
+}
+
+func readAndWriteDemo(sm proto.Message) {
+	// Write to a binary file
 	writeToFile("simple.bin", sm)
-	// readFromFile()
+
+	// Read into a data structure
+	sm2 := &simple.SimpleMessage{}
+	readFromFile("simple.bin", sm2)
+	fmt.Println("Read from file: ", sm2)
 }
 
 // Writing a protobuffer to file
@@ -31,6 +43,24 @@ func writeToFile(fname string, pb proto.Message) error {
 	}
 
 	fmt.Println("Data has been written!")
+	return nil
+}
+
+// Reading from a binary file
+func readFromFile(fname string, pb proto.Message) error {
+	in, err := ioutil.ReadFile(fname)
+
+	if err != nil {
+		log.Fatalln("Can't serialize to bytes")
+		return err
+	}
+
+	if err := proto.Unmarshal(in, pb); err != nil {
+		log.Fatalln("Failed to read bytes")
+		return err
+	}
+
+	fmt.Println("Data has been read!")
 	return nil
 }
 
