@@ -13,7 +13,7 @@ import (
 type server struct{}
 
 func (*server) Sum(ctx context.Context, req *calculatorpb.SumRequest) (*calculatorpb.SumResponse, error) {
-	fmt.Printf("Sum function was invoked with: %v", req)
+	fmt.Printf("Sum function was invoked with: %v \n", req)
 	result := req.GetA() + req.GetB()
 	res := calculatorpb.SumResponse{
 		Result: result,
@@ -26,7 +26,7 @@ func main() {
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 
 	if err != nil {
-		log.Fatalf("Failed to listed: %v", err)
+		log.Fatalf("Failed to listen: %v", err)
 	}
 
 	s := grpc.NewServer()
