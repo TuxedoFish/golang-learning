@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+
 	// Create a pointer to a sample message
 	sm := doSimple()
 
