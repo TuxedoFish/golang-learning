@@ -1,1 +1,3 @@
-protoc -I src/ --go_out src/ src/simple/simple.proto
+#!/bin/bash
+
+protoc greet/greetpb/greet.proto --go_out=plugins=grpc:.
